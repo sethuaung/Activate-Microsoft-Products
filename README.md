@@ -29,8 +29,6 @@
     ```
 - Make sure your internet connection is good enough, then open the file: _right click & choose **Open as Administrator**_. Automatically it will access KMS server to activate your Microsoft Office 2016. Wait until its processing done.
 
-    ![screenshot](https://raw.githubusercontent.com/LintangWisesa/Microsoft_Office_2016_Activator/master/Office_Activator.png)
-
 - If everything goes well, now your Microsoft Office is activated. On the last line, you can type __*n*__ to exit from the terminal, or type __*y*__ Enjoy! :sunglasses:
 
 #
