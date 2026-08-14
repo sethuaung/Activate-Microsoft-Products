@@ -1,0 +1,8 @@
+{
+  "title": "Zeno Docs",
+  "theme": "docs",
+  "baseUrl": "/",
+  "plugins": [
+    { "name": "toc" }
+  ]
+}

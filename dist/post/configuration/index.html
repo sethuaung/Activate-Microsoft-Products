@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Configuration - Zeno Docs</title>
+  <link rel="stylesheet" href="/style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-javascript.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-json.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-markdown.min.js"></script>
+</head>
+<body class="docs-post">
+  <nav class="docs-navbar">
+  <div class="navbar-container">
+    <div class="navbar-brand">
+      <a href="/" class="brand-link">
+        <span class="brand-icon">🚀</span>
+        <span class="brand-text">Zeno Docs</span>
+      </a>
+    </div>
+    <div class="navbar-search">
+      <input type="text" id="searchInput" placeholder="Search..." />
+      <div id="searchResults" class="search-results"></div>
+    </div>
+    <div class="navbar-actions">
+      <a href="https://github.com/mine3krish/zeno" class="nav-link">
+        <span class="link-icon">⭐</span>
+        <span>GitHub</span>
+      </a>
+      <button class="theme-toggle" onclick="toggleTheme()" aria-label="Toggle theme">
+        <span class="theme-icon">🌙</span>
+      </button>
+    </div>
+  </div>
+</nav>
+
+<script>
+  let postsIndex = [];
+
+async function initSearch() {
+  postsIndex = await fetch('/posts.json').then(r => r.json());
+
+  const input = document.getElementById('searchInput');
+  const resultsBox = document.getElementById('searchResults');
+
+  if (!input || !resultsBox) return;
+
+  input.addEventListener('input', () => {
+    const query = input.value.trim().toLowerCase();
+
+    if (query.length < 2) {
+      resultsBox.style.display = 'none';
+      return;
+    }
+
+    const matches = postsIndex.filter(p =>
+      p.title.toLowerCase().includes(query) ||
+      (p.excerpt && p.excerpt.toLowerCase().includes(query))
+    );
+
+    if (matches.length) {
+      resultsBox.innerHTML = matches.map(p =>
+        `<a href="${p.url}" class="search-result-item">${p.title}</a>`
+      ).join('');
+    } else {
+      resultsBox.innerHTML = `<div class="search-result-item">No results found</div>`;
+    }
+
+    resultsBox.style.display = 'block';
+  });
+
+  document.addEventListener('click', (e) => {
+    if (!resultsBox.contains(e.target) && e.target !== input) {
+      resultsBox.style.display = 'none';
+    }
+  });
+}
+
+initSearch();
+</script>
+  
+  <div class="docs-layout">
+    <aside class="docs-sidebar" id="sidebar">
+  <div class="sidebar-header">
+    <h3>Documentation</h3>
+    <button class="sidebar-toggle" onclick="toggleSidebar()">
+      <span class="toggle-icon">×</span>
+    </button>
+  </div>
+  
+  <nav class="sidebar-nav">
+    <div class="nav-section">
+      <h4 class="nav-section-title">Getting Started</h4>
+      <ul class="nav-list">
+        <li><a href="/post/introduction-to-zeno/" class="nav-item">Introduction</a></li>
+        <li><a href="/post/installation/" class="nav-item">Installation</a></li>
+      </ul>
+    </div>
+    
+    <div class="nav-section">
+      <h4 class="nav-section-title">Core Concepts</h4>
+      <ul class="nav-list">
+        <li><a href="/post/configuration/" class="nav-item">Configuration</a></li>
+        <li><a href="/post/themes" class="nav-item">Themes</a></li>
+        <li><a href="/post/plugins" class="nav-item">Plugins</a></li>
+        <li><a href="/post/markdown" class="nav-item">Markdown</a></li>
+      </ul>
+    </div>
+  </nav>
+</aside>
+    
+    <main class="docs-main">
+      <article class="docs-article">
+        <div class="article-header">
+          <div class="breadcrumb">
+            <a href="/">Documentation</a>
+            <span class="breadcrumb-separator">›</span>
+            <span>Configuration</span>
+          </div>
+          
+          <h1 class="article-title">Configuration</h1>
+          
+          <div class="article-meta">
+            <time class="article-date">2024-09-19</time>
+            <div class="article-tags">
+              <span class="tag">Guide</span>
+              <span class="tag">Tutorial</span>
+            </div>
+          </div>
+        </div>
+        
+        <div class="article-content">
+          <h2>Table of Contents</h2>
+<ul>
+<li><a href="#basic-configuration">Basic Configuration</a></li>
+<li><a href="#all-options">All Options</a></li>
+<li><a href="#configuration-reference">Configuration Reference</a></li>
+<li><a href="#common-examples">Common Examples</a></li>
+<li><a href="#plugin-configuration">Plugin Configuration</a></li>
+<li><a href="#validation">Validation</a></li>
+<li><a href="#quick-tips">Quick Tips</a></li>
+</ul>
+<h1>Configuration</h1>
+<p>Zeno uses a single <code>zeno.config.json</code> file to configure your entire blog. Simple and straightforward.</p>
+<h3>Basic Configuration <a id="basic-configuration"></a></h3>
+<p>Create <code>zeno.config.json</code> in your project root:</p>
+<pre><code class="language-json">{
+  &quot;title&quot;: &quot;My Blog&quot;,
+  &quot;theme&quot;: &quot;default&quot;,
+  &quot;plugins&quot;: []
+}
+</code></pre>
+<p>That's it! Your blog is ready to build.</p>
+<h3>All Options <a id="all-options"></a></h3>
+<pre><code class="language-json">{
+  &quot;title&quot;: &quot;My Blog&quot;,
+  &quot;theme&quot;: &quot;default&quot;,
+  &quot;plugins&quot;: [
+    {
+      &quot;name&quot;: &quot;plugin-name&quot;,
+      &quot;options&quot;: {
+        &quot;key&quot;: &quot;value&quot;
+      }
+    }
+  ]
+}
+</code></pre>
+<h3>Configuration Reference <a id="configuration-reference"></a></h3>
+<table>
+<thead>
+<tr>
+<th>Option</th>
+<th>Default</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>title</code></td>
+<td><code>&quot;My Zeno Blog&quot;</code></td>
+<td>Site title</td>
+</tr>
+<tr>
+<td><code>theme</code></td>
+<td><code>&quot;default&quot;</code></td>
+<td>Theme folder name</td>
+</tr>
+<tr>
+<td><code>plugins</code></td>
+<td><code>[]</code></td>
+<td>Array of plugin configurations</td>
+</tr>
+</tbody>
+</table>
+<h3>Common Examples <a id="common-examples"></a></h3>
+<h3>Blog Setup</h3>
+<pre><code class="language-json">{
+  &quot;title&quot;: &quot;John's Tech Blog&quot;,
+  &quot;theme&quot;: &quot;classy&quot;,
+  &quot;plugins&quot;: [
+    { &quot;name&quot;: &quot;toc&quot; },
+    { &quot;name&quot;: &quot;analytics&quot;, &quot;options&quot;: { &quot;id&quot;: &quot;GA-123&quot; } }
+  ]
+}
+</code></pre>
+<h3>Documentation Site</h3>
+<pre><code class="language-json">{
+  &quot;title&quot;: &quot;Project Docs&quot;,
+  &quot;theme&quot;: &quot;docs&quot;,
+  &quot;plugins&quot;: [
+    { &quot;name&quot;: &quot;toc&quot;, &quot;options&quot;: { &quot;minHeadings&quot;: 3 } },
+    { &quot;name&quot;: &quot;search&quot; }
+  ]
+}
+</code></pre>
+<h3>Plugin Configuration <a id="plugin-configuration"></a></h3>
+<p>Plugins are configured as objects with <code>name</code> and optional <code>options</code>:</p>
+<pre><code class="language-json">{
+  &quot;plugins&quot;: [
+    { &quot;name&quot;: &quot;simple-plugin&quot; },
+    {
+      &quot;name&quot;: &quot;advanced-plugin&quot;,
+      &quot;options&quot;: {
+        &quot;setting1&quot;: &quot;value1&quot;,
+        &quot;setting2&quot;: true,
+        &quot;setting3&quot;: 42
+      }
+    }
+  ]
+}
+</code></pre>
+<h3>Validation <a id="validation"></a></h3>
+<p>Zeno validates your config on build. Common errors:</p>
+<pre><code class="language-json">// ❌ Wrong - strings required
+{
+  &quot;title&quot;: 123,
+  &quot;theme&quot;: true
+}
+
+// ✅ Correct
+{
+  &quot;title&quot;: &quot;My Blog&quot;,
+  &quot;theme&quot;: &quot;default&quot;
+}
+</code></pre>
+<h3>Quick Tips <a id="quick-tips"></a></h3>
+<ul>
+<li><strong>Keep it simple</strong> - Start with just title and theme</li>
+<li><strong>Use relative paths</strong> - Avoid absolute directory paths</li>
+<li><strong>Test locally</strong> - Run <code>zeno build</code> to validate config</li>
+<li><strong>Version control</strong> - Always commit your config file</li>
+</ul>
+
+        </div>
+          
+          <div class="article-actions">
+            <a href="https://github.com/mine3krish/zeno/" class="edit-page">
+              <span class="edit-icon">✏️</span>
+              Edit this page
+            </a>
+          </div>
+        </div>
+      </article>
+    </main>
+  </div>
+  
+  <footer class="docs-footer">
+  <div class="footer-container">
+    <div class="footer-content">
+      <div class="footer-section">
+        <h4>Zeno Docs</h4>
+        <p>Blazing fast blogs for everyone</p>
+        <div class="footer-links">
+          <a href="https://github.com/mine3krish/zeno" class="footer-link">GitHub</a>
+          <a href="https://npmjs.com/package/zeno-blog" class="footer-link">npm</a>
+          <!-- <a href="/changelog.html" class="footer-link">Changelog</a> -->
+        </div>
+      </div>
+      
+      <!-- <div class="footer-section">
+        <h4>Resources</h4>
+        <div class="footer-links">
+          <a href="/examples.html" class="footer-link">Examples</a>
+          <a href="/templates.html" class="footer-link">Templates</a>
+          <a href="/community.html" class="footer-link">Community</a>
+        </div>
+      </div>
+       -->
+
+      <div class="footer-section">
+        <h4>Support</h4>
+        <div class="footer-links">
+          <a href="https://github.com/mine3krish/zeno/issues" class="footer-link">Report Issues</a>
+        </div>
+      </div>
+    </div>
+    
+    <div class="footer-bottom">
+      <p>&copy; 2025 Built with ❤️ and Zeno.</p>
+    </div>
+  </div>
+</footer>
+  
+  <script>
+    // Generate table of contents
+    document.addEventListener('DOMContentLoaded', function() {
+      addCopyButtons();
+      setupScrollSpy();
+    });
+    
+    function addCopyButtons() {
+      const codeBlocks = document.querySelectorAll('pre[class*="language-"]');
+      codeBlocks.forEach(block => {
+        const button = document.createElement('button');
+        button.className = 'copy-button';
+        button.innerHTML = '📋 Copy';
+        button.addEventListener('click', () => {
+          navigator.clipboard.writeText(block.querySelector('code').textContent);
+          button.innerHTML = '✅ Copied!';
+          setTimeout(() => button.innerHTML = '📋 Copy', 2000);
+        });
+        
+        block.style.position = 'relative';
+        block.appendChild(button);
+      });
+    }
+    
+    function setupScrollSpy() {
+      const links = document.querySelectorAll('.toc-link');
+      const sections = Array.from(links).map(link => 
+        document.querySelector(link.getAttribute('href'))
+      ).filter(Boolean);
+      
+      function updateActiveLink() {
+        const scrollTop = window.scrollY + 100;
+        
+        let current = '';
+        sections.forEach(section => {
+          if (section.offsetTop <= scrollTop) {
+            current = section.id;
+          }
+        });
+        
+        links.forEach(link => {
+          link.classList.remove('active');
+          if (link.getAttribute('href') === `#${current}`) {
+            link.classList.add('active');
+          }
+        });
+      }
+      
+      window.addEventListener('scroll', updateActiveLink);
+      updateActiveLink();
+    }
+  </script>
+  <script>
+function toggleTheme() {
+  const currentTheme = document.documentElement.getAttribute('data-theme');
+  const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+  
+  document.documentElement.setAttribute('data-theme', newTheme);
+  localStorage.setItem('theme', newTheme);
+  
+  const themeIcon = document.querySelector('.theme-icon');
+  if (themeIcon) {
+    themeIcon.textContent = newTheme === 'dark' ? '☀️' : '🌙';
+  }
+}
+
+function toggleSidebar() {
+  const sidebar = document.getElementById('sidebar');
+  sidebar.classList.toggle('open');
+}
+</script>
+</body>
+</html>

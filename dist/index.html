@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Zeno Docs - Documentation</title>
+  <link rel="stylesheet" href="/style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-javascript.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-json.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-markdown.min.js"></script>
+</head>
+<body class="docs-home">
+  <nav class="docs-navbar">
+  <div class="navbar-container">
+    <div class="navbar-brand">
+      <a href="/" class="brand-link">
+        <span class="brand-icon">🚀</span>
+        <span class="brand-text">Zeno Docs</span>
+      </a>
+    </div>
+    <div class="navbar-search">
+      <input type="text" id="searchInput" placeholder="Search..." />
+      <div id="searchResults" class="search-results"></div>
+    </div>
+    <div class="navbar-actions">
+      <a href="https://github.com/mine3krish/zeno" class="nav-link">
+        <span class="link-icon">⭐</span>
+        <span>GitHub</span>
+      </a>
+      <button class="theme-toggle" onclick="toggleTheme()" aria-label="Toggle theme">
+        <span class="theme-icon">🌙</span>
+      </button>
+    </div>
+  </div>
+</nav>
+
+<script>
+  let postsIndex = [];
+
+async function initSearch() {
+  postsIndex = await fetch('/posts.json').then(r => r.json());
+
+  const input = document.getElementById('searchInput');
+  const resultsBox = document.getElementById('searchResults');
+
+  if (!input || !resultsBox) return;
+
+  input.addEventListener('input', () => {
+    const query = input.value.trim().toLowerCase();
+
+    if (query.length < 2) {
+      resultsBox.style.display = 'none';
+      return;
+    }
+
+    const matches = postsIndex.filter(p =>
+      p.title.toLowerCase().includes(query) ||
+      (p.excerpt && p.excerpt.toLowerCase().includes(query))
+    );
+
+    if (matches.length) {
+      resultsBox.innerHTML = matches.map(p =>
+        `<a href="${p.url}" class="search-result-item">${p.title}</a>`
+      ).join('');
+    } else {
+      resultsBox.innerHTML = `<div class="search-result-item">No results found</div>`;
+    }
+
+    resultsBox.style.display = 'block';
+  });
+
+  document.addEventListener('click', (e) => {
+    if (!resultsBox.contains(e.target) && e.target !== input) {
+      resultsBox.style.display = 'none';
+    }
+  });
+}
+
+initSearch();
+</script>
+  
+  <div class="docs-layout">
+    <aside class="docs-sidebar" id="sidebar">
+  <div class="sidebar-header">
+    <h3>Documentation</h3>
+    <button class="sidebar-toggle" onclick="toggleSidebar()">
+      <span class="toggle-icon">×</span>
+    </button>
+  </div>
+  
+  <nav class="sidebar-nav">
+    <div class="nav-section">
+      <h4 class="nav-section-title">Getting Started</h4>
+      <ul class="nav-list">
+        <li><a href="/post/introduction-to-zeno/" class="nav-item">Introduction</a></li>
+        <li><a href="/post/installation/" class="nav-item">Installation</a></li>
+      </ul>
+    </div>
+    
+    <div class="nav-section">
+      <h4 class="nav-section-title">Core Concepts</h4>
+      <ul class="nav-list">
+        <li><a href="/post/configuration/" class="nav-item">Configuration</a></li>
+        <li><a href="/post/themes" class="nav-item">Themes</a></li>
+        <li><a href="/post/plugins" class="nav-item">Plugins</a></li>
+        <li><a href="/post/markdown" class="nav-item">Markdown</a></li>
+      </ul>
+    </div>
+  </nav>
+</aside>
+    
+    <main class="docs-main">
+      <div class="hero-section">
+        <div class="hero-badge">
+          <span class="badge-icon">🚀</span>
+          <span>Documentation</span>
+        </div>
+        <h1 class="hero-title">Zeno Docs</h1>
+        <p class="hero-subtitle">Blazing fast blogs for everyone</p>
+        <p class="hero-description">
+          A lightweight, plugin-first Markdown → Blog framework built with JavaScript. 
+          Simple, hackable, and extendable.
+        </p>
+        
+        <div class="hero-actions">
+          <a href="/post/introduction-to-zeno/" class="btn btn-primary">
+            <span>Get Started</span>
+            <span class="btn-icon">→</span>
+          </a>
+          <a href="https://github.com/mine3krish/zeno" class="btn btn-secondary">
+            <span class="btn-icon">⭐</span>
+            <span>Star on GitHub</span>
+          </a>
+        </div>
+        
+        <div class="hero-code">
+          <div class="code-header">
+            <div class="code-dots">
+              <span></span><span></span><span></span>
+            </div>
+            <span class="code-title">Quick Start</span>
+          </div>
+          <pre class="code-block"><code class="language-bash"># Create a new blog
+npx zeno-blog init mysite
+cd mysite
+
+# Build and serve
+zeno build
+zeno serve 3000</code></pre>
+        </div>
+      </div>
+      
+      <section class="features-section">
+        <h2>Core Features</h2>
+        <div class="features-grid">
+          <div class="feature-card">
+            <div class="feature-icon">📝</div>
+            <h3>Markdown to HTML</h3>
+            <p>Write posts in plain .md files with frontmatter support</p>
+          </div>
+          <div class="feature-card">
+            <div class="feature-icon">🎨</div>
+            <h3>Themes</h3>
+            <p>Simple folder-based themes with components</p>
+          </div>
+          <div class="feature-card">
+            <div class="feature-icon">🔌</div>
+            <h3>Plugins</h3>
+            <p>Extend with hooks: onMarkdownParse, onRenderHTML, onPostBuild</p>
+          </div>
+        </div>
+      </section>
+      
+      <section class="docs-grid">
+        <h2>Documentation</h2>
+        <div id="posts-container" class="posts-container"></div><div id="pagination"></div>
+      </section>
+    </main>
+  </div>
+  
+  <footer class="docs-footer">
+  <div class="footer-container">
+    <div class="footer-content">
+      <div class="footer-section">
+        <h4>Zeno Docs</h4>
+        <p>Blazing fast blogs for everyone</p>
+        <div class="footer-links">
+          <a href="https://github.com/mine3krish/zeno" class="footer-link">GitHub</a>
+          <a href="https://npmjs.com/package/zeno-blog" class="footer-link">npm</a>
+          <!-- <a href="/changelog.html" class="footer-link">Changelog</a> -->
+        </div>
+      </div>
+      
+      <!-- <div class="footer-section">
+        <h4>Resources</h4>
+        <div class="footer-links">
+          <a href="/examples.html" class="footer-link">Examples</a>
+          <a href="/templates.html" class="footer-link">Templates</a>
+          <a href="/community.html" class="footer-link">Community</a>
+        </div>
+      </div>
+       -->
+
+      <div class="footer-section">
+        <h4>Support</h4>
+        <div class="footer-links">
+          <a href="https://github.com/mine3krish/zeno/issues" class="footer-link">Report Issues</a>
+        </div>
+      </div>
+    </div>
+    
+    <div class="footer-bottom">
+      <p>&copy; 2025 Built with ❤️ and Zeno.</p>
+    </div>
+  </div>
+</footer>
+  <script>
+function toggleTheme() {
+  const currentTheme = document.documentElement.getAttribute('data-theme');
+  const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+  
+  document.documentElement.setAttribute('data-theme', newTheme);
+  localStorage.setItem('theme', newTheme);
+  
+  const themeIcon = document.querySelector('.theme-icon');
+  if (themeIcon) {
+    themeIcon.textContent = newTheme === 'dark' ? '☀️' : '🌙';
+  }
+}
+
+function toggleSidebar() {
+  const sidebar = document.getElementById('sidebar');
+  sidebar.classList.toggle('open');
+}
+</script>
+</body>
+</html>
+<script>
+  const itemsPerPage = 5;
+  let currentPage = 1;
+  let posts = [];
+  const postTemplate = `<div class="docs-card">
+  <div class="card-header">
+    <div class="card-icon">📚</div>
+    <h3 class="card-title">
+      <a href="/{{slug}}/" class="card-link">{{post_title}}</a>
+    </h3>
+  </div>
+  <p class="card-description">{{excerpt}}</p>
+  <div class="card-footer">
+    <div class="card-tags">
+      <span class="card-tag">Guide</span>
+    </div>
+    <a href="/{{slug}}/" class="card-arrow">→</a>
+  </div>
+</div>`;
+
+  async function loadPosts() {
+    posts = await fetch('posts.json').then(r => r.json());
+    renderPage(currentPage);
+  }
+
+  function renderPage(page) {
+    const start = (page - 1) * itemsPerPage;
+    const end = start + itemsPerPage;
+    const container = document.getElementById('posts-container');
+
+    container.innerHTML = posts
+      .slice(start, end)
+      .map(p => {
+        let html = postTemplate;
+        html = html.replace(/{{post_title}}/g, p.title)
+                   .replace(/{{date}}/g, p.date || '')
+                   .replace(/{{slug}}/g, p.url)
+                   .replace(/{{excerpt}}/g, p.excerpt || '');
+        html = html.replace(/{{thumbail}}/g, `<img src="${p.thumbnail || ''}" alt="Thumbnail" class="thumbnail"/>` || '');
+        return html;
+      }).join('');
+
+    const totalPages = Math.ceil(posts.length / itemsPerPage);
+    const pagination = document.getElementById('pagination');
+    pagination.innerHTML = Array.from({length: totalPages}, (_, i) =>
+      `<button ${i+1===page?'disabled':''} onclick="renderPage(${i+1})">${i+1}</button>`
+    ).join(' ');
+  }
+
+  loadPosts();
+</script>

@@ -1,0 +1,56 @@
+{
+  "name": "zeno-blog",
+  "version": "1.1.7",
+  "description": "Zeno — Blazing fast blogs for everyone",
+  "main": "./bin/zeno.js",
+  "bin": {
+    "zeno": "./bin/zeno.js"
+  },
+  "scripts": {
+    "dev": "node ./bin/zeno.js serve",
+    "build": "node ./bin/zeno.js build",
+    "init": "node ./bin/zeno.js init",
+    "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js"
+  },
+  "keywords": [
+    "blog",
+    "markdown",
+    "plugin",
+    "static site",
+    "zeno"
+  ],
+  "author": "mine3krish",
+  "license": "MIT",
+  "type": "module",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mine3krish/zeno.git"
+  },
+  "files": [
+    "bin/",
+    "src/",
+    "themes/",
+    "public/",
+    "package.json",
+    "README.md",
+    "LICENSE"
+  ],
+  "engines": {
+    "node": ">=18"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "dependencies": {
+    "chalk": "^5.6.2",
+    "chokidar": "^4.0.3",
+    "commander": "^14.0.1",
+    "express": "^5.1.0",
+    "gray-matter": "^4.0.3",
+    "markdown-it": "^14.1.0"
+  },
+  "devDependencies": {
+    "execa": "^9.6.0",
+    "jest": "^30.2.0"
+  }
+}
