@@ -1,3 +1,11 @@
+---
+title: "Microsoft  Activation  Scripts (MAS)"
+date: "2024-09-19"
+tags: "configuration, setup, config"
+excerpt: "A Windows and Office activator using HWID / Ohook / KMS38 / Online KMS activation methods, with a focus on open-source code and fewer antivirus detections."
+---
+
+
 <p align="center"><img src="https://massgrave.dev/img/logo_small.png" alt="MAS Logo"></p>
 
 <h1 align="center">Microsoft  Activation  Scripts (MAS)</h1>
